@@ -1,0 +1,63 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'gradleDemo'
+            keyPassword 'yolocc'
+            storePassword 'yolocc'
+        }
+    }
+    compileSdkVersion 23
+    buildToolsVersion "24.0.2"
+    defaultConfig {
+        applicationId "com.yolocc.gradledemo"
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("./gradleDemo.jks")
+            storePassword "test123"
+            keyAlias "gradleDemo"
+            keyPassword "yolocc"
+        }
+    }
+
+    buildTypes {
+
+        dev {
+            versionNameSuffix '.dev'
+            signingConfig signingConfigs.release
+            applicationIdSuffix '.dev'
+            buildConfigField "String", "API_URL", '"http://dev.yolocc/api"'
+        }
+
+        debug {
+            versionNameSuffix '.debug'
+            applicationIdSuffix '.debug'
+            signingConfig signingConfigs.release
+            buildConfigField "String", "API_URL", '"http://debug.yolocc/api"'
+        }
+
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            buildConfigField "String", "API_URL", '"http://yolocc/api"'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    testCompile 'junit:junit:4.12'
+}
